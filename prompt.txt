@@ -1,0 +1,26 @@
+Atue como um Engenheiro de Software Sênior e Desenvolvedor Full-Stack. Estou construindo o projeto open-source Spreadsheet-to-Web Mirror Engine (repositório: https://github.com/PabloRipe/Spreadsheet-to-Web-Mirror-Engine).
+
+O objetivo deste sistema é transformar qualquer arquivo de planilha complexo (.xlsx) em uma aplicação web interativa estilizada com Tailwind CSS. O fluxo consiste em ler uma planilha local, clonar sua estrutura integral (abas, fontes, cores, bordas, larguras e fórmulas), aplicar uma convenção de cores para separar campos fixos de editáveis, gerar um template limpo e exportar um espelho JSON para uma interface web leve. Na web, o usuário pode preencher os dados de forma parcial ou integral, alternar entre múltiplos projetos abertos sem perda de dados (com auto-save via sessionStorage) e gerar um novo arquivo .xlsx finalizado.
+
+Por favor, analise a arquitetura abaixo e comece implementando a primeira parte do sistema: O Módulo de Processamento Local em Python utilizando a biblioteca openpyxl para clonagem, limpeza por convenção de cores e serialização para JSON.
+
+---
+
+### Documento de Requisitos e Arquitetura do Sistema
+
+1. **Módulo de Processamento Local (Python / Openpyxl):**
+   - Localiza e lê arquivos `.xlsx` do computador.
+   - Clona a estrutura integral de todas as abas (incluindo fórmulas intactas).
+   - Aplica a **Convenção de Cores**: Células com fórmulas ou formatação de cabeçalho/rótulo são fixas (não-editáveis). Células com padrão de entrada (ex: fundo branco/padrão e sem fórmula) são marcadas como `editavel: true` e seus valores são limpos para o modo template.
+   - Exporta a estrutura para um JSON estruturado contendo coordenadas, metadados visuais e flags de editabilidade.
+
+2. **Camada Web e Interface (Tailwind CSS + Vanilla JS):**
+   - Layout limpo e responsivo usando Tailwind CSS.
+   - Navegação por abas de planilha (`Sheet Tabs`).
+   - Células editáveis renderizadas como inputs amigáveis; células fixas renderizadas como textos formatados.
+   - Gerenciamento Multi-Projeto com alternância de contexto fluida.
+
+3. **Gerenciamento de Estado e Salvamento (`sessionStorage`):**
+   - Auto-save do rascunho atual em `sessionStorage` ao alternar entre planilhas/projetos.
+   - Permissão de salvamento parcial ou integral (aceita campos em branco).
+   - Injeção dos dados preenchidos de volta no template clonado para gerar o novo `.xlsx`.
